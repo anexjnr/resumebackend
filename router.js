@@ -24,5 +24,33 @@ res.json(
 )
     })
 
+    router.post("/signin",async(req,res)=>{
+        let email = req.body.email
+    let data = await resumemodel.findOne({email:email})
+    if(!data)
+    {
+        return res.json(
+            {
+                status:"Invalid user"
+            }
+        )
+    }
+    let dpPassword = data.password
+    let inputPassword = req.body.password
+    const match = await bcrypt.compare(inputPassword,dpPassword)
+    if(!match)
+    {
+        res.json(
+            {
+                status:"Invalid Password"
+            }
+        )
+    }
+    res.json(
+        {
+            status:"success"
+        }
+    )
+    })
 
 module.exports=router
